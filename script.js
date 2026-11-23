@@ -100,7 +100,7 @@ function renderHero() {
   document.getElementById("heroWait").textContent = queues[s.id].length;
 }
 
-function renderAll() { renderServices(); renderTable(); renderHero(); save(); }
+function renderAll() { renderServices(); renderTable(); renderHero(); renderStats(); save(); }
 
 function fillSelects() {
   var join = document.getElementById("svcSel"), view = document.getElementById("viewSel"), opts = "";
@@ -134,6 +134,7 @@ document.getElementById("joinForm").addEventListener("submit", function (e) {
   document.getElementById("viewSel").value = id;
   this.reset();
   renderAll();
+  toast("Token " + t.token + " issued for " + s.name);
 });
 
 document.getElementById("viewSel").addEventListener("change", renderTable);
@@ -153,6 +154,77 @@ document.getElementById("tblBody").addEventListener("click", function (e) {
   var id = b.getAttribute("data-svc"), tk = b.getAttribute("data-token");
   queues[id] = queues[id].filter(function (t) { return t.token !== tk; });
   renderAll();
+});
+
+// ---------- Extra: stats, toast, theme, menu, contact ----------
+function renderStats() {
+  var waiting = 0, open = 0, issued = 0, totalWait = 0;
+  for (var i = 0; i < services.length; i++) {
+    var id = services[i].id;
+    waiting += queues[id].length;
+    issued += counters[id];
+    if (services[i].open) { open++; totalWait += waitFor(id, queues[id].length); }
+  }
+  var avg = open ? Math.round(totalWait / open) : 0;
+  document.getElementById("stats").innerHTML =
+    "<div><b>" + waiting + "</b><span>People waiting</span></div>" +
+    "<div><b>" + open + "/" + services.length + "</b><span>Counters open</span></div>" +
+    "<div><b>" + avg + " min</b><span>Average wait</span></div>" +
+    "<div><b>" + issued + "</b><span>Tokens issued</span></div>";
+}
+
+var toastTimer;
+function toast(text) {
+  var t = document.getElementById("toast");
+  t.textContent = text; t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { t.classList.remove("show"); }, 2800);
+}
+
+document.getElementById("menuBtn").addEventListener("click", function () {
+  var nav = document.getElementById("nav");
+  var open = nav.classList.toggle("open");
+  this.setAttribute("aria-expanded", open);
+});
+document.getElementById("nav").addEventListener("click", function (e) {
+  if (e.target.tagName === "A") { this.classList.remove("open"); }
+});
+
+document.getElementById("themeBtn").addEventListener("click", function () {
+  var root = document.documentElement;
+  var dark = root.getAttribute("data-theme") === "dark" ||
+    (!root.getAttribute("data-theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  var next = dark ? "light" : "dark";
+  root.setAttribute("data-theme", next);
+  try { localStorage.setItem("qf-theme", next); } catch (e) {}
+});
+try { var saved = localStorage.getItem("qf-theme"); if (saved) { document.documentElement.setAttribute("data-theme", saved); } } catch (e) {}
+
+document.getElementById("contactForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+  var name = document.getElementById("cName").value.trim();
+  var mail = document.getElementById("cMail").value.trim();
+  var text = document.getElementById("cText").value.trim();
+  var msg = document.getElementById("cMsg");
+  var okMail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail);
+  if (name === "" || !okMail || text.length < 10) {
+    msg.textContent = "Enter your name, a valid email and a message of at least 10 characters.";
+    msg.className = "msg err"; return;
+  }
+  msg.textContent = ""; this.reset();
+  toast("Thanks " + name.split(" ")[0] + ", your feedback was sent.");
+});
+
+var sections = document.querySelectorAll("main section");
+window.addEventListener("scroll", function () {
+  var cur = "";
+  for (var i = 0; i < sections.length; i++) {
+    if (sections[i].getBoundingClientRect().top < 120) { cur = sections[i].id; }
+  }
+  var links = document.querySelectorAll("nav a");
+  for (var k = 0; k < links.length; k++) {
+    links[k].classList.toggle("active", links[k].getAttribute("href") === "#" + cur);
+  }
 });
 
 // ---------- Start ----------
