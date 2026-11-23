@@ -9,16 +9,25 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="wrap">
+<a class="skip" href="#home">Skip to content</a>
 <header class="top">
-  <a class="logo" href="#home"><span>Q</span>QueueFlow</a>
-  <nav aria-label="Main"><ul>
-    <li><a href="#services">Counters</a></li>
-    <li><a href="#join">Join</a></li>
-    <li><a href="#live">Live queue</a></li>
-    <li><a href="#about">About</a></li>
-  </ul></nav>
+  <div class="wrap bar">
+    <a class="logo" href="#home"><span>Q</span>QueueFlow</a>
+    <nav aria-label="Main" id="nav"><ul>
+      <li><a href="#services">Counters</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#join">Join</a></li>
+      <li><a href="#live">Live queue</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul></nav>
+    <div class="actions">
+      <button class="icon" id="themeBtn" type="button" aria-label="Switch light or dark theme">&#9680;</button>
+      <button class="icon menu" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">&#9776;</button>
+    </div>
+  </div>
 </header>
+<div class="wrap">
 
 <main id="home">
 <div class="hero">
@@ -35,10 +44,23 @@
   </div>
 </div>
 
+<div class="stats" id="stats" aria-label="Campus summary"></div>
+
 <section id="services">
   <h2>Campus counters</h2>
   <p class="lead">Each counter shows its own queue. Wait time is the number of people ahead multiplied by the average service time.</p>
   <div class="grid" id="serviceGrid"></div>
+</section>
+
+<section id="features">
+  <h2>Why QueueFlow</h2>
+  <p class="lead">Built for students and for the staff who serve them.</p>
+  <div class="grid">
+    <article class="card"><div class="ico">&#9201;</div><h3>Honest wait times</h3><p>See how long a counter will take before you leave your class or hostel.</p></article>
+    <article class="card"><div class="ico">&#127903;</div><h3>Digital tokens</h3><p>Get a numbered token in seconds. No paper slips, no pushing in line.</p></article>
+    <article class="card"><div class="ico">&#9889;</div><h3>Urgent priority</h3><p>Time-sensitive visits, like exam fee deadlines, move ahead of normal ones.</p></article>
+    <article class="card"><div class="ico">&#128202;</div><h3>Live updates</h3><p>Counters, queue length and the token being served update as things change.</p></article>
+  </div>
 </section>
 
 <section id="join">
@@ -87,6 +109,31 @@
   </div>
 </section>
 
+<section id="faq">
+  <h2>Frequently asked questions</h2>
+  <div class="faq">
+    <details><summary>Do I need to create an account?</summary><p>No. Enter your name and roll number to get a token.</p></details>
+    <details><summary>What if I miss my turn?</summary><p>Go to the counter and ask the staff. They can call you again or add you back at the end of the queue.</p></details>
+    <details><summary>Can I join two queues at once?</summary><p>Yes, one token per counter. You cannot take two tokens at the same counter.</p></details>
+    <details><summary>How is the wait time calculated?</summary><p>The number of people ahead of you plus one, multiplied by the average service time of that counter.</p></details>
+  </div>
+</section>
+
+<section id="contact">
+  <h2>Send feedback</h2>
+  <p class="lead">Found a problem or have an idea for a new counter? Tell us.</p>
+  <form id="contactForm" novalidate>
+    <label for="cName">Your name</label>
+    <input id="cName" type="text" required>
+    <label for="cMail">College email</label>
+    <input id="cMail" type="email" placeholder="name@college.edu" required>
+    <label for="cText">Message</label>
+    <textarea id="cText" rows="4" required></textarea>
+    <button class="btn" type="submit">Send feedback</button>
+    <p class="msg" id="cMsg" role="status"></p>
+  </form>
+</section>
+
 <section id="about">
   <h2>About QueueFlow</h2>
   <p class="lead">A mini project for the Web Development lab, built with HTML, CSS and JavaScript. It shows how a campus can cut crowding at service counters.</p>
@@ -97,7 +144,15 @@
   </ul>
 </section>
 </main>
-<footer>QueueFlow · Smart Campus Queue System · Mini Project</footer>
+<footer>
+  <div class="foot">
+    <div><strong>QueueFlow</strong><p>Smart Campus Queue System. A Web Development mini project.</p></div>
+    <div><strong>Quick links</strong><ul><li><a href="#services">Counters</a></li><li><a href="#join">Join a queue</a></li><li><a href="#faq">FAQ</a></li></ul></div>
+    <div><strong>Built with</strong><ul><li>HTML5</li><li>CSS3</li><li>JavaScript</li></ul></div>
+  </div>
+  <p>&copy; 2026 QueueFlow. <a href="#home">Back to top</a></p>
+</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 </div>
 
 <script src="script.js"></script>
