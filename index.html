@@ -2,159 +2,154 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="QueueFlow: join campus queues digitally and see live wait times.">
 <title>QueueFlow – Smart Campus Queue System</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<a class="skip" href="#home">Skip to content</a>
+<a class="skip" href="#main">Skip to content</a>
+
 <header class="top">
   <div class="wrap bar">
     <a class="logo" href="#home"><span>Q</span>QueueFlow</a>
-    <nav aria-label="Main" id="nav"><ul>
-      <li><a href="#services">Counters</a></li>
-      <li><a href="#features">Features</a></li>
-      <li><a href="#join">Join</a></li>
-      <li><a href="#live">Live queue</a></li>
-      <li><a href="#faq">FAQ</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul></nav>
+    <nav id="nav" aria-label="Main">
+      <ul>
+        <li><a href="#services">Counters</a></li>
+        <li><a href="#join">Join</a></li>
+        <li><a href="#live">Live board</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
     <div class="actions">
       <button class="icon" id="themeBtn" type="button" aria-label="Switch light or dark theme">&#9680;</button>
       <button class="icon menu" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">&#9776;</button>
     </div>
   </div>
 </header>
-<div class="wrap">
 
-<main id="home">
-<div class="hero">
-  <div>
-    <h1>Skip the line. Keep your day.</h1>
-    <p>QueueFlow lets students take a digital token for the library, canteen, fee counter and more, then see how long the wait really is.</p>
-    <p><a class="btn" href="#join">Get a token</a> <a class="btn alt" href="#services">See wait times</a></p>
-  </div>
-  <div class="ticket" aria-live="polite">
-    <small>Now serving at</small>
-    <strong id="heroSvc">Fee Counter</strong>
-    <div class="num" id="heroNum">A-001</div>
-    <div class="svc"><span id="heroWait">0</span> people waiting</div>
-  </div>
-</div>
-
-<div class="stats" id="stats" aria-label="Campus summary"></div>
-
-<section id="services">
-  <h2>Campus counters</h2>
-  <p class="lead">Each counter shows its own queue. Wait time is the number of people ahead multiplied by the average service time.</p>
-  <div class="grid" id="serviceGrid"></div>
-</section>
-
-<section id="features">
-  <h2>Why QueueFlow</h2>
-  <p class="lead">Built for students and for the staff who serve them.</p>
-  <div class="grid">
-    <article class="card"><div class="ico">&#9201;</div><h3>Honest wait times</h3><p>See how long a counter will take before you leave your class or hostel.</p></article>
-    <article class="card"><div class="ico">&#127903;</div><h3>Digital tokens</h3><p>Get a numbered token in seconds. No paper slips, no pushing in line.</p></article>
-    <article class="card"><div class="ico">&#9889;</div><h3>Urgent priority</h3><p>Time-sensitive visits, like exam fee deadlines, move ahead of normal ones.</p></article>
-    <article class="card"><div class="ico">&#128202;</div><h3>Live updates</h3><p>Counters, queue length and the token being served update as things change.</p></article>
-  </div>
-</section>
-
-<section id="join">
-  <h2>Join a queue</h2>
-  <div class="split">
-    <div class="how">
-      <p class="lead">Three steps, no standing around.</p>
-      <ol>
-        <li>Fill in your name and roll number.</li>
-        <li>Pick a counter and how urgent your visit is.</li>
-        <li>Take your token and watch the live queue.</li>
-      </ol>
-      <p class="lead">Urgent visits (for example, exam fee deadlines) are placed ahead of normal ones.</p>
+<main id="main" class="wrap">
+  <section class="hero" id="home">
+    <div>
+      <h1>Skip the line. Keep your day.</h1>
+      <p>QueueFlow lets students take a digital token for the fee counter, library, canteen and more, then follow the wait in real time.</p>
+      <p class="cta"><a class="btn token" href="#join">Get a token</a><a class="btn alt" href="#live">View live board</a></p>
     </div>
-    <form id="joinForm" novalidate>
-      <label for="name">Full name</label>
-      <input id="name" type="text" placeholder="e.g. Ananya Rao" required>
-      <label for="roll">Roll number</label>
-      <input id="roll" type="text" placeholder="e.g. 1XX25CS001" required>
-      <label for="svcSel">Counter</label>
-      <select id="svcSel"></select>
-      <fieldset>
-        <legend>Priority</legend>
-        <label><input type="radio" name="prio" value="normal" checked> Normal</label>
-        <label><input type="radio" name="prio" value="urgent"> Urgent</label>
-      </fieldset>
-      <button class="btn" type="submit">Get my token</button>
-      <p class="msg" id="formMsg" role="status"></p>
+    <aside class="ticket" aria-live="polite" aria-label="Now serving">
+      <div class="pills" id="heroPills"></div>
+      <small>Now serving</small>
+      <div class="num" id="heroNum">-</div>
+      <div class="stub">
+        <span><b id="heroWait">0</b> waiting</span>
+        <span>New token: about <b id="heroEta">0 min</b></span>
+      </div>
+    </aside>
+  </section>
+
+  <div class="stats" id="stats" aria-label="Campus summary"></div>
+
+  <section id="services">
+    <h2>Campus counters</h2>
+    <p class="lead">Wait time is the number of people ahead of you plus one, multiplied by the counter's average service time.</p>
+    <div class="grid" id="serviceGrid"></div>
+  </section>
+
+  <section id="join">
+    <h2>Join a queue</h2>
+    <p class="lead">Urgent visits, like exam fee deadlines, are placed ahead of normal ones.</p>
+    <div class="split">
+      <form id="joinForm" novalidate>
+        <label for="name">Full name</label>
+        <input id="name" type="text" autocomplete="name" placeholder="e.g. Ananya Rao" required>
+        <label for="roll">Roll number</label>
+        <input id="roll" type="text" placeholder="e.g. 1XX25CS001" required>
+        <label for="svcSel">Counter</label>
+        <select id="svcSel"></select>
+        <fieldset>
+          <legend>Priority</legend>
+          <label><input type="radio" name="prio" value="normal" checked> Normal</label>
+          <label><input type="radio" name="prio" value="urgent"> Urgent</label>
+        </fieldset>
+        <button class="btn token" type="submit">Get my token</button>
+        <p class="msg" id="formMsg" role="status"></p>
+      </form>
+      <div>
+        <h3>Your tokens</h3>
+        <div id="myTokens" class="tracker"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="live">
+    <h2>Live board</h2>
+    <div class="tools">
+      <select id="viewSel" aria-label="Choose counter to view"></select>
+      <input id="search" type="search" placeholder="Search name or token" aria-label="Search queue">
+      <label class="check"><input type="checkbox" id="simChk"> Simulate live activity</label>
+    </div>
+    <div class="tablebox">
+      <table>
+        <caption id="tblCap">Queue</caption>
+        <thead><tr><th>Token</th><th>Name</th><th>Roll no.</th><th>Priority</th><th>Est. wait</th></tr></thead>
+        <tbody id="tblBody"></tbody>
+      </table>
+    </div>
+    <details class="staff">
+      <summary>Staff controls</summary>
+      <div class="tools">
+        <button class="btn" id="nextBtn" type="button">Call next</button>
+        <button class="btn alt" id="toggleBtn" type="button">Close counter</button>
+        <span class="stepper">
+          Service time
+          <button class="btn alt small" id="avgMinus" type="button" aria-label="Decrease service time">-</button>
+          <b id="avgVal">0 min</b>
+          <button class="btn alt small" id="avgPlus" type="button" aria-label="Increase service time">+</button>
+        </span>
+        <button class="btn alt" id="resetBtn" type="button">Reset demo</button>
+      </div>
+    </details>
+  </section>
+
+  <section id="faq">
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <details><summary>Do I need to create an account?</summary><p>No. Enter your name and roll number to get a token.</p></details>
+      <details><summary>What if I miss my turn?</summary><p>Go to the counter and ask the staff. They can call you again or add you back to the queue.</p></details>
+      <details><summary>Can I join more than one queue?</summary><p>Yes, but only one token per counter.</p></details>
+      <details><summary>Is my roll number visible to others?</summary><p>No. The live board shows only the last four characters.</p></details>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Send feedback</h2>
+    <p class="lead">Found a problem or want a new counter added? Tell us.</p>
+    <form id="contactForm" novalidate>
+      <label for="cName">Your name</label>
+      <input id="cName" type="text" autocomplete="name" required>
+      <label for="cMail">College email</label>
+      <input id="cMail" type="email" autocomplete="email" placeholder="name@college.edu" required>
+      <label for="cText">Message</label>
+      <textarea id="cText" rows="4" required></textarea>
+      <button class="btn" type="submit">Send feedback</button>
+      <p class="msg" id="cMsg" role="status"></p>
     </form>
-  </div>
-</section>
-
-<section id="live">
-  <h2>Live queue</h2>
-  <div class="tools">
-    <select id="viewSel" aria-label="Choose counter to view"></select>
-    <button class="btn alt" id="nextBtn" type="button">Call next</button>
-    <button class="btn alt" id="clearBtn" type="button">Reset demo</button>
-  </div>
-  <div class="tablebox">
-    <table>
-      <caption id="tblCap">Queue</caption>
-      <thead><tr><th>Token</th><th>Name</th><th>Roll no.</th><th>Priority</th><th>Est. wait</th><th></th></tr></thead>
-      <tbody id="tblBody"></tbody>
-    </table>
-  </div>
-</section>
-
-<section id="faq">
-  <h2>Frequently asked questions</h2>
-  <div class="faq">
-    <details><summary>Do I need to create an account?</summary><p>No. Enter your name and roll number to get a token.</p></details>
-    <details><summary>What if I miss my turn?</summary><p>Go to the counter and ask the staff. They can call you again or add you back at the end of the queue.</p></details>
-    <details><summary>Can I join two queues at once?</summary><p>Yes, one token per counter. You cannot take two tokens at the same counter.</p></details>
-    <details><summary>How is the wait time calculated?</summary><p>The number of people ahead of you plus one, multiplied by the average service time of that counter.</p></details>
-  </div>
-</section>
-
-<section id="contact">
-  <h2>Send feedback</h2>
-  <p class="lead">Found a problem or have an idea for a new counter? Tell us.</p>
-  <form id="contactForm" novalidate>
-    <label for="cName">Your name</label>
-    <input id="cName" type="text" required>
-    <label for="cMail">College email</label>
-    <input id="cMail" type="email" placeholder="name@college.edu" required>
-    <label for="cText">Message</label>
-    <textarea id="cText" rows="4" required></textarea>
-    <button class="btn" type="submit">Send feedback</button>
-    <p class="msg" id="cMsg" role="status"></p>
-  </form>
-</section>
-
-<section id="about">
-  <h2>About QueueFlow</h2>
-  <p class="lead">A mini project for the Web Development lab, built with HTML, CSS and JavaScript. It shows how a campus can cut crowding at service counters.</p>
-  <ul>
-    <li>HTML: structure, lists, tables and forms</li>
-    <li>CSS: selectors, box model, colours and responsive layout</li>
-    <li>JavaScript: arrays, objects, conditions, loops, functions and events</li>
-  </ul>
-</section>
+  </section>
 </main>
+
 <footer>
-  <div class="foot">
-    <div><strong>QueueFlow</strong><p>Smart Campus Queue System. A Web Development mini project.</p></div>
-    <div><strong>Quick links</strong><ul><li><a href="#services">Counters</a></li><li><a href="#join">Join a queue</a></li><li><a href="#faq">FAQ</a></li></ul></div>
-    <div><strong>Built with</strong><ul><li>HTML5</li><li>CSS3</li><li>JavaScript</li></ul></div>
+  <div class="wrap">
+    <div class="foot">
+      <div><strong>QueueFlow</strong><p>Smart Campus Queue System. A Web Development mini project.</p></div>
+      <div><strong>Quick links</strong><ul><li><a href="#services">Counters</a></li><li><a href="#join">Join a queue</a></li><li><a href="#faq">FAQ</a></li></ul></div>
+      <div><strong>Built with</strong><ul><li>HTML5</li><li>CSS3</li><li>JavaScript</li></ul></div>
+    </div>
+    <p>&copy; 2026 QueueFlow. <a href="#home">Back to top</a></p>
   </div>
-  <p>&copy; 2026 QueueFlow. <a href="#home">Back to top</a></p>
 </footer>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-</div>
-
 <script src="script.js"></script>
 </body>
 </html>
