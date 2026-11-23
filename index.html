@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QueueFlow – Smart Campus Queue System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <a class="logo" href="#home"><span>Q</span>QueueFlow</a>
+  <nav aria-label="Main"><ul>
+    <li><a href="#services">Counters</a></li>
+    <li><a href="#join">Join</a></li>
+    <li><a href="#live">Live queue</a></li>
+    <li><a href="#about">About</a></li>
+  </ul></nav>
+</header>
+
+<main id="home">
+<div class="hero">
+  <div>
+    <h1>Skip the line. Keep your day.</h1>
+    <p>QueueFlow lets students take a digital token for the library, canteen, fee counter and more, then see how long the wait really is.</p>
+    <p><a class="btn" href="#join">Get a token</a> <a class="btn alt" href="#services">See wait times</a></p>
+  </div>
+  <div class="ticket" aria-live="polite">
+    <small>Now serving at</small>
+    <strong id="heroSvc">Fee Counter</strong>
+    <div class="num" id="heroNum">A-001</div>
+    <div class="svc"><span id="heroWait">0</span> people waiting</div>
+  </div>
+</div>
+
+<section id="services">
+  <h2>Campus counters</h2>
+  <p class="lead">Each counter shows its own queue. Wait time is the number of people ahead multiplied by the average service time.</p>
+  <div class="grid" id="serviceGrid"></div>
+</section>
+
+<section id="join">
+  <h2>Join a queue</h2>
+  <div class="split">
+    <div class="how">
+      <p class="lead">Three steps, no standing around.</p>
+      <ol>
+        <li>Fill in your name and roll number.</li>
+        <li>Pick a counter and how urgent your visit is.</li>
+        <li>Take your token and watch the live queue.</li>
+      </ol>
+      <p class="lead">Urgent visits (for example, exam fee deadlines) are placed ahead of normal ones.</p>
+    </div>
+    <form id="joinForm" novalidate>
+      <label for="name">Full name</label>
+      <input id="name" type="text" placeholder="e.g. Ananya Rao" required>
+      <label for="roll">Roll number</label>
+      <input id="roll" type="text" placeholder="e.g. 1XX25CS001" required>
+      <label for="svcSel">Counter</label>
+      <select id="svcSel"></select>
+      <fieldset>
+        <legend>Priority</legend>
+        <label><input type="radio" name="prio" value="normal" checked> Normal</label>
+        <label><input type="radio" name="prio" value="urgent"> Urgent</label>
+      </fieldset>
+      <button class="btn" type="submit">Get my token</button>
+      <p class="msg" id="formMsg" role="status"></p>
+    </form>
+  </div>
+</section>
+
+<section id="live">
+  <h2>Live queue</h2>
+  <div class="tools">
+    <select id="viewSel" aria-label="Choose counter to view"></select>
+    <button class="btn alt" id="nextBtn" type="button">Call next</button>
+    <button class="btn alt" id="clearBtn" type="button">Reset demo</button>
+  </div>
+  <div class="tablebox">
+    <table>
+      <caption id="tblCap">Queue</caption>
+      <thead><tr><th>Token</th><th>Name</th><th>Roll no.</th><th>Priority</th><th>Est. wait</th><th></th></tr></thead>
+      <tbody id="tblBody"></tbody>
+    </table>
+  </div>
+</section>
+
+<section id="about">
+  <h2>About QueueFlow</h2>
+  <p class="lead">A mini project for the Web Development lab, built with HTML, CSS and JavaScript. It shows how a campus can cut crowding at service counters.</p>
+  <ul>
+    <li>HTML: structure, lists, tables and forms</li>
+    <li>CSS: selectors, box model, colours and responsive layout</li>
+    <li>JavaScript: arrays, objects, conditions, loops, functions and events</li>
+  </ul>
+</section>
+</main>
+<footer>QueueFlow · Smart Campus Queue System · Mini Project</footer>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
